@@ -7,7 +7,7 @@ use std::path::Path;
 use deqnap::walk_and_remove_extraneous_files;
 
 const USAGE: &'static str = "
-DEQNAPify your Dropbox.
+DEQNAPify your directory tree.
 
 Usage:
     deqnap <path>
