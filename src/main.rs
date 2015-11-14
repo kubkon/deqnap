@@ -1,10 +1,10 @@
 extern crate rustc_serialize;
 extern crate docopt;
+extern crate deqnap;
 
-use std::io;
-use std::fs::{self, DirEntry};
-use std::path::Path;
 use docopt::Docopt;
+use std::path::Path;
+use deqnap::{walk_dirs, do_something};
 
 const USAGE: &'static str = "
 DEQNAPify your Dropbox.
@@ -22,24 +22,6 @@ Options:
 #[derive(Debug, RustcDecodable)]
 struct Args {
     arg_path: String,
-}
-
-fn walk_dirs(dir: &Path, cb: &Fn(&DirEntry)) -> io::Result<()> {
-    if try!(fs::metadata(dir)).is_dir() {
-        for entry in try!(fs::read_dir(dir)) {
-            let entry = try!(entry);
-            if try!(fs::metadata(entry.path())).is_dir() {
-                try!(walk_dirs(&entry.path(), cb));
-            } else {
-                cb(&entry);
-            }
-        }
-    }
-    Ok(())
-}
-
-fn do_something(entry: &DirEntry) {
-    println!("{}", entry.file_name().to_str().unwrap());
 }
 
 fn main() {
