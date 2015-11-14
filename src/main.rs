@@ -4,7 +4,7 @@ extern crate deqnap;
 
 use docopt::Docopt;
 use std::path::Path;
-use deqnap::{walk_dirs, do_something};
+use deqnap::walk_and_remove_extraneous_files;
 
 const USAGE: &'static str = "
 DEQNAPify your Dropbox.
@@ -30,8 +30,8 @@ fn main() {
                             .and_then(|d| d.decode())
                             .unwrap_or_else(|e| e.exit());
     let path = Path::new(&args.arg_path);
-    match walk_dirs(path, &do_something) {
+    match walk_and_remove_extraneous_files(path) {
         Err(err) => panic!("Unexpected error occurred: {}", err),
-        Ok(()) => ()
+        Ok(()) => println!("Finished removing all extraneous files.")
     }
 }

@@ -2,26 +2,29 @@
 extern crate regex;
 
 use std::io;
-use std::fs::{self, DirEntry};
+use std::fs;
 use std::path::Path;
 use regex::Regex;
 
-pub fn walk_dirs(dir: &Path, cb: &Fn(&DirEntry)) -> io::Result<()> {
+pub fn walk_and_remove_extraneous_files(dir: &Path) -> io::Result<()> {
     if try!(fs::metadata(dir)).is_dir() {
         for entry in try!(fs::read_dir(dir)) {
             let entry = try!(entry);
             if try!(fs::metadata(entry.path())).is_dir() {
-                try!(walk_dirs(&entry.path(), cb));
+                try!(walk_and_remove_extraneous_files(&entry.path()));
             } else {
-                cb(&entry);
+                let filename = match entry.file_name().into_string() {
+                    Err(_) => continue,
+                    Ok(filename) => filename
+                };
+                // Match extraneous files
+                if match_extraneous_file(&filename) {
+                    println!("{}", filename);
+                }
             }
         }
     }
     Ok(())
-}
-
-pub fn do_something(entry: &DirEntry) {
-    println!("{}", entry.file_name().to_str().unwrap());
 }
 
 pub fn match_extraneous_file(name: &str) -> bool {
