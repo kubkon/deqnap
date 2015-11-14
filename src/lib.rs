@@ -6,12 +6,12 @@ use std::fs;
 use std::path::Path;
 use regex::Regex;
 
-pub fn walk_and_remove_extraneous_files(dir: &Path) -> io::Result<()> {
+pub fn walk_and_remove_extraneous_files(dir: &Path, count: &mut u64) -> io::Result<()> {
     if try!(fs::metadata(dir)).is_dir() {
         for entry in try!(fs::read_dir(dir)) {
             let entry = try!(entry);
             if try!(fs::metadata(entry.path())).is_dir() {
-                try!(walk_and_remove_extraneous_files(&entry.path()));
+                try!(walk_and_remove_extraneous_files(&entry.path(), count));
             } else {
                 let filename = match entry.file_name().into_string() {
                     Err(_) => continue,
@@ -19,7 +19,10 @@ pub fn walk_and_remove_extraneous_files(dir: &Path) -> io::Result<()> {
                 };
                 // Match extraneous files
                 if match_extraneous_file(&filename) {
-                    println!("{}", filename);
+                    let path = entry.path();
+                    println!("Removing file: {}", path.display());
+                    try!(fs::remove_file(path));
+                    *count += 1;
                 }
             }
         }

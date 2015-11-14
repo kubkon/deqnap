@@ -30,8 +30,15 @@ fn main() {
                             .and_then(|d| d.decode())
                             .unwrap_or_else(|e| e.exit());
     let path = Path::new(&args.arg_path);
-    match walk_and_remove_extraneous_files(path) {
+    let mut count_removed = 0u64;
+    match walk_and_remove_extraneous_files(path, &mut count_removed) {
         Err(err) => panic!("Unexpected error occurred: {}", err),
-        Ok(()) => println!("Finished removing all extraneous files.")
+        Ok(()) => {
+            if count_removed > 0 {
+                println!("Finished. Removed {} extraneous files.", count_removed);
+            } else {
+                println!("No extraneous files found.");
+            }
+        }
     }
 }
