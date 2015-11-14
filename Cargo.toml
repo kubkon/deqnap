@@ -2,3 +2,7 @@
 name = "deqnap"
 version = "0.1.0"
 authors = ["Jakub Konka <kubkon@jakubkonka.com>"]
+
+[dependencies]
+docopt = "0.6"
+rustc-serialize = "0.3"
