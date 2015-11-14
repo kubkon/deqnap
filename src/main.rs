@@ -22,5 +22,8 @@ fn do_something(entry: &DirEntry) {
 
 fn main() {
     let p = Path::new(".");
-    let _ = walk_dirs(p, &do_something);
+    match walk_dirs(p, &do_something) {
+        Err(err) => panic!("Unexpected error occurred: {}", err),
+        Ok(()) => ()
+    }
 }
