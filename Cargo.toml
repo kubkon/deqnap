@@ -7,11 +7,3 @@ authors = ["Jakub Konka <kubkon@jakubkonka.com>"]
 docopt = "0.6"
 rustc-serialize = "0.3"
 regex = "0.1.41"
-
-[lib]
-name = "deqnap"
-path = "src/lib.rs"
-
-[[bin]]
-name = "deqnap"
-path = "src/main.rs"

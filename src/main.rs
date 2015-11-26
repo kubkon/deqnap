@@ -1,6 +1,7 @@
 extern crate rustc_serialize;
 extern crate docopt;
-extern crate deqnap;
+
+mod deqnap;
 
 use docopt::Docopt;
 use std::path::Path;

@@ -1,10 +1,9 @@
-#![crate_name="deqnap"]
 extern crate regex;
 
 use std::io;
 use std::fs;
 use std::path::Path;
-use regex::Regex;
+use self::regex::Regex;
 
 pub fn walk_and_remove_extraneous_files(dir: &Path, count: &mut u64) -> io::Result<()> {
     if try!(fs::metadata(dir)).is_dir() {
